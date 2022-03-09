@@ -122,9 +122,14 @@ public class home_fragment extends Fragment {
                         if (matcher.group(1) != null && !matcher.group(1).trim().isEmpty()) {
                             int from_index=text.indexOf("ב",text.indexOf("0912"));
                             int point_index=text.indexOf("בסך",text.indexOf("0912"));
-                            Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
-                            DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
-                            myDbHandler.insertuserdata(text.substring(from_index,point_index), Double.parseDouble(matcher.group(1)), "Mastercard Ends With 0912", sdf1.format(res));
+                            if(from_index!=0 && point_index!=0){
+                                if(point_index-from_index>0){
+                                    Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
+                                    DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+                                    myDbHandler.insertuserdata(text.substring(from_index,point_index), Double.parseDouble(matcher.group(1)), "Mastercard Ends With 0912", sdf1.format(res));
+                                }
+                            }
+
                         }
 
                     }
@@ -137,11 +142,15 @@ public class home_fragment extends Fragment {
                             if (matcher.group(1) != null && !matcher.group(1).trim().isEmpty()) {
                                 int from_index=text.indexOf("ב",text.indexOf(matcher.group(1)));
                                 int point_index=text.indexOf(".",text.indexOf(".")+1);
-                                Log.d("INDEX Of MONEY",text.substring(from_index,point_index));
-                                Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
-                                DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
-                                myDbHandler.insertuserdata(text.substring(from_index,point_index), Double.parseDouble(matcher.group(1)) * 3.31,
-                                        "Isracard Ends With 1223", sdf1.format(res));
+                                if(from_index!=0 && point_index!=0){
+                                    if(point_index-from_index>0){
+                                        Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
+                                        DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+                                        myDbHandler.insertuserdata(text.substring(from_index,point_index), Double.parseDouble(matcher.group(1)) * 3.31,
+                                                "Isracard Ends With 1223", sdf1.format(res));
+                                    }
+                                }
+
                             }
 
                         }
@@ -149,14 +158,14 @@ public class home_fragment extends Fragment {
                         if (matcher.find()) {
                             int from_index=text.indexOf("ב",text.indexOf(matcher.group(1)));
                             int point_index=text.indexOf(".",text.indexOf(".")+1);
-                            Log.d("INDEX Of MONEY",text.substring(from_index,point_index));
-                            if (matcher.group(1) != null && !matcher.group(1).trim().isEmpty()) {
-                                Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
-                                DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
-                                myDbHandler.insertuserdata(text.substring(from_index,point_index), Double.parseDouble(matcher.group(1)),
-                                        "Isracard Ends With 1223", sdf1.format(res));
+                            if(from_index!=0 && point_index!=0){
+                                if(point_index-from_index>0){
+                                    Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
+                                    DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+                                    myDbHandler.insertuserdata(text.substring(from_index,point_index), Double.parseDouble(matcher.group(1)),
+                                            "Isracard Ends With 1223", sdf1.format(res));
+                                }
                             }
-
                         }
                     }
 
