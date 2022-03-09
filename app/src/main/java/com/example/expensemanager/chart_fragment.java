@@ -44,13 +44,14 @@ public class chart_fragment extends Fragment {
     }
 
 
-    BarChart pieChart,pie2;
+    BarChart pieChart, pie2;
     TextView total_spent_today;
-    ArrayList<BarEntry> barEntries=new ArrayList<>()    ;
-    ArrayList<BarEntry> barEntries2=new ArrayList<>()    ;
-    List<String> months=new ArrayList<>();
-    double whole_amount=0;
+    ArrayList<BarEntry> barEntries = new ArrayList<>();
+    ArrayList<BarEntry> barEntries2 = new ArrayList<>();
+    List<String> months = new ArrayList<>();
+    double whole_amount = 0;
     boolean isUsd;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,96 +71,94 @@ public class chart_fragment extends Fragment {
         months.add("October");
         months.add("November");
         months.add("December");
-        pieChart=viewGroup.findViewById(R.id.pie_chart);
-        pie2=viewGroup.findViewById(R.id.pie_chart2);
-        total_spent_today=viewGroup.findViewById(R.id.total_spent_today);
+        pieChart = viewGroup.findViewById(R.id.pie_chart);
+        pie2 = viewGroup.findViewById(R.id.pie_chart2);
+        total_spent_today = viewGroup.findViewById(R.id.total_spent_today);
 
-        SharedPreferences sharedPreferences=getContext().getSharedPreferences("MAIN", Context.MODE_PRIVATE);
-        isUsd=sharedPreferences.getBoolean("IS_USD",false);
-        MyDbHandler myDbHandler=new MyDbHandler(getContext());
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MAIN", Context.MODE_PRIVATE);
+        isUsd = sharedPreferences.getBoolean("IS_USD", false);
+        MyDbHandler myDbHandler = new MyDbHandler(getContext());
         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DAY_OF_MONTH, 1);
         String monthStart = dateFormat.format(c.getTime());
         c = Calendar.getInstance(); // reset
         String today = dateFormat.format(c.getTime());
-        List<Expense_Trans_Model> expense_trans_models=myDbHandler.get_bw_dates(monthStart,today);
-        if(expense_trans_models.size()>0){
-            if(isUsd){
+        List<Expense_Trans_Model> expense_trans_models = myDbHandler.get_bw_dates(monthStart, today);
+        if (expense_trans_models.size() > 0) {
+            if (isUsd) {
 
 
-                for(Expense_Trans_Model ff:expense_trans_models){
-                    whole_amount=whole_amount+ff.getAmount();
-                    String formattedDate =ff.getDate();
-                    String day=formattedDate.substring(8, 10);
-                    Log.d("DAYS IS",day);
-                    int amount= (int) (ff.getAmount()*0.30);
-                    barEntries.add(new BarEntry(Integer.parseInt(day),amount));
+                for (Expense_Trans_Model ff : expense_trans_models) {
+                    whole_amount = whole_amount + ff.getAmount();
+                    String formattedDate = ff.getDate();
+                    String day = formattedDate.substring(8, 10);
+                    Log.d("DAYS IS", day);
+                    int amount = (int) (ff.getAmount() * 0.30);
+                    barEntries.add(new BarEntry(Integer.parseInt(day), amount));
                 }
 
-                BarDataSet barDataSet=new BarDataSet(barEntries,"Expense");
+                BarDataSet barDataSet = new BarDataSet(barEntries, "Expense");
                 barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
                 barDataSet.setValueTextColor(Color.BLACK);
                 barDataSet.setValueTextSize(16f);
 
-                BarData barData=new BarData(barDataSet);
+                BarData barData = new BarData(barDataSet);
 
                 pieChart.setFitBars(true);
                 pieChart.setData(barData);
                 pieChart.getDescription().setText("Expense Of Today Month");
                 pieChart.animateY(2000);
 
-                double in_usd=0.30*whole_amount;
-                total_spent_today.setText(Double.toString(in_usd)+"$");
-            }
-            else {
+                double in_usd = 0.30 * whole_amount;
+                total_spent_today.setText(Double.toString(in_usd) + "$");
+            } else {
 
-                for(Expense_Trans_Model ff:expense_trans_models){
-                    whole_amount=whole_amount+ff.getAmount();
-                    String formattedDate =ff.getDate();
-                    String day=formattedDate.substring(8, 10);
-                    Log.d("DAYS IS",day);
-                    int amount= (int) ff.getAmount();
-                    barEntries.add(new BarEntry(Integer.parseInt(day),amount));
+                for (Expense_Trans_Model ff : expense_trans_models) {
+                    whole_amount = whole_amount + ff.getAmount();
+                    String formattedDate = ff.getDate();
+                    String day = formattedDate.substring(8, 10);
+                    Log.d("DAYS IS", day);
+                    int amount = (int) ff.getAmount();
+                    barEntries.add(new BarEntry(Integer.parseInt(day), amount));
 
                 }
 
-                BarDataSet barDataSet=new BarDataSet(barEntries,"Expense");
+                BarDataSet barDataSet = new BarDataSet(barEntries, "Expense");
                 barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
                 barDataSet.setValueTextColor(Color.BLACK);
                 barDataSet.setValueTextSize(26f);
 
-                BarData barData=new BarData(barDataSet);
+                BarData barData = new BarData(barDataSet);
 
                 pieChart.setFitBars(true);
                 pieChart.setData(barData);
                 pieChart.getDescription().setText("Expense Of Today Month");
                 pieChart.animateY(2000);
 
-                double in_usd=whole_amount;
-                total_spent_today.setText(Double.toString(in_usd)+"₪");
+                double in_usd = whole_amount;
+                total_spent_today.setText(Double.toString(in_usd) + "₪");
             }
         }
 
-        for(int h=1;h<=12;h++){
-            if(h<10){
-                String formating="0"+h;
-                barEntries2.add(new BarEntry(h, (int)myDbHandler.particular_month(formating,"2022")));
-            }
-            else {
-                barEntries2.add(new BarEntry(h, (int) myDbHandler.particular_month(String.valueOf(h),"2022")));
+        for (int h = 1; h <= 12; h++) {
+            if (h < 10) {
+                String formating = "0" + h;
+                barEntries2.add(new BarEntry(h, (int) myDbHandler.particular_month(formating, "2022")));
+            } else {
+                barEntries2.add(new BarEntry(h, (int) myDbHandler.particular_month(String.valueOf(h), "2022")));
             }
 
         }
-        BarDataSet barDataSet=new BarDataSet(barEntries2,"NOTHER");
+        BarDataSet barDataSet = new BarDataSet(barEntries2, "NOTHER");
         barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
 
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(0f);
 
-        BarData barData=new BarData(barDataSet);
+        BarData barData = new BarData(barDataSet);
 
-       XAxis xAxis=pie2.getXAxis();
+        XAxis xAxis = pie2.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(months));
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);

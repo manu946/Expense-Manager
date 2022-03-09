@@ -132,9 +132,12 @@ public class settin_page extends AppCompatActivity {
                 if(text.contains("מאסטרקארד") || text.contains("MasterCard") || text.contains("Mastercard")|| text.contains("www.cal-online.co.il")){
                     if (matcher.find())
                     {
-                        Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
-                        DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
-                        myDbHandler.insertuserdata("La Case De Papel", Double.parseDouble(matcher.group(1)),"Mastercard Ends With 0912",sdf1.format(res));
+                        if(matcher.group(1)!=null && !matcher.group(1).trim().isEmpty()){
+                            Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
+                            DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+                            myDbHandler.insertuserdata("La Case De Papel", Double.parseDouble(matcher.group(1)),"Mastercard Ends With 0912",sdf1.format(res));
+                        }
+
                     }
                 }
                 else if( text.contains("Isracard") || text.contains("ישראכרט")|| text.contains("isracard")){
@@ -142,22 +145,29 @@ public class settin_page extends AppCompatActivity {
                     if(text.contains("USD")){
                         if (matcher.find())
                         {
-                            Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
-                            DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
-                            myDbHandler.insertuserdata("La Case De Papel", Double.parseDouble(matcher.group(1))*3.31,"Isracard Ends With 1223",sdf1.format(res));
+                            if(matcher.group(1)!=null && !matcher.group(1).trim().isEmpty()){
+                                Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
+                                DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+                                myDbHandler.insertuserdata("La Case De Papel", Double.parseDouble(matcher.group(1))*3.31,"Isracard Ends With 1223",sdf1.format(res));
+                            }
+
                         }
                     }
                     else {
                         if (matcher.find())
                         {
-                            Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
-                            DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
-                            myDbHandler.insertuserdata("La Case De Papel", Double.parseDouble(matcher.group(1)),"Isracard Ends With 1223",sdf1.format(res));
+                            if(matcher.group(1)!=null && !matcher.group(1).trim().isEmpty()) {
+                                Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
+                                DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+                                myDbHandler.insertuserdata("La Case De Papel", Double.parseDouble(matcher.group(1)),"Isracard Ends With 1223",sdf1.format(res));
+                            }
+
                         }
                     }
 
 
                 }
+
 
                 lstSms.add(objSms);
 
