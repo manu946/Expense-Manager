@@ -1,13 +1,16 @@
 package com.example.expensemanager;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -23,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.expensemanager.Data.MyDbHandler;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -47,36 +52,62 @@ public class home_fragment extends Fragment {
     Cursor c;
     ShimmerFrameLayout shimmerFrameLayout;
     MyDbHandler myDbHandler;
-
+    SharedPreferences sharedPreferences;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_home_fragment, null);
+        sharedPreferences=getContext().getSharedPreferences("MAIN",Context.MODE_PRIVATE);
         myDbHandler = new MyDbHandler(getContext());
-        myDbHandler.delete_all();
-
         recyclerView = viewGroup.findViewById(R.id.recyler);
         not_found = viewGroup.findViewById(R.id.exp);
         total_Spent = viewGroup.findViewById(R.id.total_spent);
         shimmerFrameLayout = viewGroup.findViewById(R.id.shimmer);
 
-        getAllSms();
-        if (myDbHandler.getallExpense().size() > 0) {
-            recyclerView.setVisibility(View.VISIBLE);
-            not_found.setVisibility(View.GONE);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-            recyclerView.setAdapter(new sms_adapter(getContext(), myDbHandler.getallExpense()));
-            shimmerFrameLayout.setVisibility(View.GONE);
-            shimmerFrameLayout.stopShimmer();
-        } else {
-            not_found.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-            shimmerFrameLayout.setVisibility(View.GONE);
-            shimmerFrameLayout.stopShimmer();
+
+        if (getContext().checkSelfPermission(Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_SMS,Manifest.permission.RECEIVE_SMS},
+                    108);
+
+        }
+        else {
+            if(myDbHandler.getallExpense().size()>0){
+                if (myDbHandler.getallExpense().size() > 0) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    not_found.setVisibility(View.GONE);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                    recyclerView.setAdapter(new sms_adapter(getContext(), myDbHandler.getallExpense()));
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    shimmerFrameLayout.stopShimmer();
+                }
+                else {
+                    not_found.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    shimmerFrameLayout.stopShimmer();
+                }
+            }
+            else {
+                getAllSms();
+                if (myDbHandler.getallExpense().size() > 0) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    not_found.setVisibility(View.GONE);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                    recyclerView.setAdapter(new sms_adapter(getContext(), myDbHandler.getallExpense()));
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    shimmerFrameLayout.stopShimmer();
+                }
+                else {
+                    not_found.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    shimmerFrameLayout.stopShimmer();
+                }
+            }
+
         }
 
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MAIN", Context.MODE_PRIVATE);
         boolean lng = sharedPreferences.getBoolean("IS_USD", false);
         if (lng) {
 
@@ -91,6 +122,26 @@ public class home_fragment extends Fragment {
 
 
         return viewGroup;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==100){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getContext(), "Restart App For Getting Expense", Toast.LENGTH_SHORT).show();
+
+            }
+            else {
+
+                Toast.makeText(getContext(), "Give Permission Otherwise We Not Fetch Your Expenses", Toast.LENGTH_SHORT).show();
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+            }
+        }
+
+
     }
 
     @SuppressLint("Range")
@@ -111,11 +162,8 @@ public class home_fragment extends Fragment {
                 String text = c.getString(c.getColumnIndexOrThrow("body"));
 
                 String patternString = "בסך (\\d{0,10})";
-                String patternString2 = "\\w+[ה]+(?= |$)";
                 Pattern pattern = Pattern.compile(patternString);
                 Matcher matcher = pattern.matcher(text);
-                Pattern pattern2 = Pattern.compile(patternString2);
-                Matcher matcher1 = pattern2.matcher(text);
 
                 if (text.contains("מאסטרקארד") || text.contains("MasterCard") || text.contains("Mastercard") || text.contains("www.cal-online.co.il")) {
                     if (matcher.find()) {
@@ -183,4 +231,5 @@ public class home_fragment extends Fragment {
 
         return lstSms;
     }
+
 }
