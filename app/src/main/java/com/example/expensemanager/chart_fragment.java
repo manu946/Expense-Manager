@@ -101,7 +101,7 @@ public class chart_fragment extends Fragment {
                 BarDataSet barDataSet = new BarDataSet(barEntries, "Expense");
                 barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
                 barDataSet.setValueTextColor(Color.BLACK);
-                barDataSet.setValueTextSize(16f);
+                barDataSet.setValueTextSize(0f);
 
                 BarData barData = new BarData(barDataSet);
 
@@ -127,7 +127,7 @@ public class chart_fragment extends Fragment {
                 BarDataSet barDataSet = new BarDataSet(barEntries, "Expense");
                 barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
                 barDataSet.setValueTextColor(Color.BLACK);
-                barDataSet.setValueTextSize(26f);
+                barDataSet.setValueTextSize(0f);
 
                 BarData barData = new BarData(barDataSet);
 

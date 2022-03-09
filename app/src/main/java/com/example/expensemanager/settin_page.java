@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class settin_page extends AppCompatActivity {
     RelativeLayout rescan,reset,notif,month_per,about,cur;
     String[] cure={"$ USD","₪ Israel Currency"};
     int selectd_pos=-1;
+    ImageView imageView2;
     MyDbHandler myDbHandler;
     Cursor c;
     @Override
@@ -41,10 +43,23 @@ public class settin_page extends AppCompatActivity {
         rescan=findViewById(R.id.rescan);
         reset=findViewById(R.id.reset);
         cur=findViewById(R.id.currency);
+        imageView2=findViewById(R.id.imageView2);
         notif=findViewById(R.id.notif);
         month_per=findViewById(R.id.month_per);
         about=findViewById(R.id.about);
+        imageView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(settin_page.this,about_page.class));
+            }
+        });
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,37 +144,62 @@ public class settin_page extends AppCompatActivity {
                 Pattern pattern2 = Pattern.compile(patternString2);
                 Matcher matcher1=pattern2.matcher(text);
                 Log.d("Is-Find",Boolean.toString(matcher1.find()));
-                if(text.contains("מאסטרקארד") || text.contains("MasterCard") || text.contains("Mastercard")|| text.contains("www.cal-online.co.il")){
-                    if (matcher.find())
-                    {
-                        if(matcher.group(1)!=null && !matcher.group(1).trim().isEmpty()){
-                            Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
-                            DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
-                            myDbHandler.insertuserdata("La Case De Papel", Double.parseDouble(matcher.group(1)),"Mastercard Ends With 0912",sdf1.format(res));
+                if (text.contains("מאסטרקארד") || text.contains("MasterCard") || text.contains("Mastercard") || text.contains("www.cal-online.co.il")) {
+                    if (matcher.find()) {
+                        if (matcher.group(1) != null && !matcher.group(1).trim().isEmpty()) {
+                            try {
+
+                                int from_index = text.indexOf("ב", text.indexOf("0912"));
+                                int point_index = text.indexOf("בסך", text.indexOf("0912"));
+                                Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
+                                DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+                                myDbHandler.insertuserdata(text.substring(from_index, point_index), Double.parseDouble(matcher.group(1)), "Mastercard Ends With 0912", sdf1.format(res));
+                            }
+                            catch (Exception ee){
+                                ee.printStackTrace();
+                            }
                         }
 
                     }
                 }
-                else if( text.contains("Isracard") || text.contains("ישראכרט")|| text.contains("isracard")){
+                else if (text.contains("Isracard") || text.contains("ישראכרט") || text.contains("isracard")) {
 
-                    if(text.contains("USD")){
-                        if (matcher.find())
-                        {
-                            if(matcher.group(1)!=null && !matcher.group(1).trim().isEmpty()){
-                                Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
-                                DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
-                                myDbHandler.insertuserdata("La Case De Papel", Double.parseDouble(matcher.group(1))*3.31,"Isracard Ends With 1223",sdf1.format(res));
+                    if (text.contains("USD")) {
+                        if (matcher.find()) {
+
+                            if (matcher.group(1) != null && !matcher.group(1).trim().isEmpty()) {
+                                try {
+
+
+                                    int from_index = text.indexOf("ב", text.indexOf(matcher.group(1)));
+                                    int point_index = text.indexOf(".", text.indexOf(".") + 1);
+                                    Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
+                                    DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+                                    myDbHandler.insertuserdata(text.substring(from_index, point_index), Double.parseDouble(matcher.group(1)) * 3.31,
+                                            "Isracard Ends With 1223", sdf1.format(res));
+                                }
+                                catch (Exception ee){
+                                    ee.printStackTrace();
+                                }
                             }
 
                         }
-                    }
-                    else {
-                        if (matcher.find())
-                        {
-                            if(matcher.group(1)!=null && !matcher.group(1).trim().isEmpty()) {
-                                Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
-                                DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
-                                myDbHandler.insertuserdata("La Case De Papel", Double.parseDouble(matcher.group(1)),"Isracard Ends With 1223",sdf1.format(res));
+                    } else {
+                        if (matcher.find()) {
+                            int from_index=text.indexOf("ב",text.indexOf(matcher.group(1)));
+                            int point_index=text.indexOf(".",text.indexOf(".")+1);
+                            if (matcher.group(1) != null && !matcher.group(1).trim().isEmpty()) {
+                                try {
+
+
+                                    Date res = new Date(c.getLong(c.getColumnIndexOrThrow("date")));
+                                    DateFormat sdf1 = new SimpleDateFormat("YYYY-MM-dd");
+                                    myDbHandler.insertuserdata(text.substring(from_index, point_index), Double.parseDouble(matcher.group(1)),
+                                            "Isracard Ends With 1223", sdf1.format(res));
+                                }
+                                catch (Exception ee){
+                                    ee.printStackTrace();
+                                }
                             }
 
                         }
