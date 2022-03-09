@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Expense Manager</string>
+    <string name="Setting">Setting</string>
+    <string name="Rescan_message">Rescan Message</string>
+    <string name="Reset_history">Reset History</string>
+    <string name="change_currency">Change Currency</string>
+    <string name="Notifications">Notifications</string>
+    <string name="Trans">Transaction</string>
+    <string name="Month_peroid">Month Period</string>
+    <string name="Expense_tracker">Expense Tracker</string>
+    <string name="About">About</string>
+    <string name="when_exp">Notify When Expense Limit Exceeded</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".starting">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SMS Expense Manager"
+        android:fontFamily="sans-serif-black"
+        android:textColor="@android:color/black"
+        android:layout_gravity="center"
+        android:textSize="28sp"
+        android:layout_marginTop="42dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Track your monthly expenses by scanning your SMS messages from Visa, Isracard, Mastercard Get notified when passing budget"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+/>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan My Messages"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"/>
+
+
+
+</LinearLayout>

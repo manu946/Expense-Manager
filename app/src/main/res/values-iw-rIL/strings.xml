@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Expense Manager</string>
+    <string name="Setting">הגדרות</string>
+    <string name="Rescan_message">סרוק מחדש את ההודעה</string>
+    <string name="Reset_history">אפס את ההיסטוריה</string>
+    <string name="change_currency">שנה מטבע</string>
+    <string name="Trans">עִסקָה</string>
+    <string name="Notifications">התראות</string>
+    <string name="Expense_tracker">עוקב אחר הוצאות</string>
+    <string name="Month_peroid">תקופת חודש</string>
+    <string name="About">על אודות</string>
+    <string name="when_exp">הודע כאשר תקרת ההוצאה חרגה</string>
+</resources>
